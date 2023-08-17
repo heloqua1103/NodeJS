@@ -9,11 +9,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Category.belongsTo(models.Role, {
-        foreignKey: "role_code",
-        targetKey: "code",
-        as: "roleData",
-      });
+      // Category.belongsTo(models.Role, {
+      //   foreignKey: "role_code",
+      //   targetKey: "code",
+      //   as: "roleData",
+      // });
     }
   }
   Category.init(

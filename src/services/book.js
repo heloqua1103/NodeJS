@@ -1,5 +1,6 @@
 import db from "../models";
 import { Op } from "sequelize";
+import { v4 as generateId } from "uuid";
 
 export const getBooks = ({ page, limit, order, name, available, ...query }) =>
   new Promise(async (resolve, reject) => {
@@ -15,12 +16,42 @@ export const getBooks = ({ page, limit, order, name, available, ...query }) =>
       const response = await db.Book.findAndCountAll({
         where: query,
         ...queries,
+        attributes: {
+          exclude: ["category_code"],
+        },
+        include: [
+          {
+            model: db.Category,
+            attributes: { exclude: ["createdAt", "updatedAt"] },
+            as: "categoryData",
+          },
+        ],
       });
 
       resolve({
         err: response ? 0 : 1,
         message: response ? "Got" : "Can not found!!!",
         bookData: response,
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+
+export const createNewBook = (body) =>
+  new Promise(async (resolve, reject) => {
+    try {
+      const response = await db.Book.findOrCreate({
+        where: { title: body?.title },
+        defaults: {
+          ...body,
+          id: generateId(),
+        },
+      });
+
+      resolve({
+        err: response[1] ? 0 : 1,
+        message: response[1] ? "Created" : "Can not create new book!!!",
       });
     } catch (e) {
       reject(e);
