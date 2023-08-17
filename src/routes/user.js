@@ -1,6 +1,10 @@
-const router = require('express').Router()
-const user = require('../controllers/user')
+import * as controllers from "../controllers";
+import express from "express";
+import verifyToken from "../middlewares/verify_token";
 
-router.get('/', user.getUser)
+const router = express.Router();
 
-module.exports = router
+router.use(verifyToken);
+router.get("/", controllers.getCurrent);
+
+module.exports = router;

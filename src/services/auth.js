@@ -29,7 +29,7 @@ export const register = ({ email, password }) =>
       resolve({
         err: response[1] ? 0 : 1,
         message: response[1] ? "Register is successfully" : "Email is exist",
-        token: token,
+        access_token: token ? `Bearer ${token}` : token,
       });
     } catch (e) {
       reject(e);
