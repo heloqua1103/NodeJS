@@ -20,7 +20,7 @@ export const register = ({ email, password }) =>
             {
               id: response[0].id,
               email: response[0].email,
-              roleCode: response[0].roleCode,
+              roleCode: response[0].role_code,
             },
             process.env.JWT_SECRET,
             { expiresIn: "5d" }
@@ -50,7 +50,7 @@ export const login = ({ email, password }) =>
             {
               id: response.id,
               email: response.email,
-              roleCode: response.roleCode,
+              roleCode: response.role_code,
             },
             process.env.JWT_SECRET,
             { expiresIn: "5d" }

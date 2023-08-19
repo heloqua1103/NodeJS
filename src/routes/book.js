@@ -9,7 +9,9 @@ const router = express.Router();
 router.get("/", controllers.getBooks);
 
 router.use(verifyToken);
-// router.use(isAdmin);
+router.use(isAdmin);
 router.post("/", uploadCloud.single("image"), controllers.createNewBook);
+router.put("/", uploadCloud.single("image"), controllers.updateBook);
+router.delete("/", controllers.deleteBook);
 
 module.exports = router;

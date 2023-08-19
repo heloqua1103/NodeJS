@@ -18,7 +18,7 @@ export const getBooks = ({ page, limit, order, name, available, ...query }) =>
         where: query,
         ...queries,
         attributes: {
-          exclude: ["category_code"],
+          exclude: ["category_code", "description"],
         },
         include: [
           {
@@ -60,5 +60,42 @@ export const createNewBook = (body, fileData) =>
     } catch (e) {
       reject(e);
       if (fileData) cloudinary.uploader.destroy(fileData.filename);
+    }
+  });
+
+export const updateBook = ({ bookId, ...body }, fileData) =>
+  new Promise(async (resolve, reject) => {
+    try {
+      if (fileData) {
+        body.image = fileData?.path;
+      }
+      const response = await db.Book.update(body, {
+        where: { id: bookId },
+      });
+
+      resolve({
+        err: response[0] > 0 ? 0 : 1,
+        message: response[0] > 0 ? "Updated" : "Can not update book!!!",
+      });
+      if (fileData && !response[0] === 0)
+        cloudinary.uploader.destroy(fileData.filename);
+    } catch (e) {
+      reject(e);
+      if (fileData) cloudinary.uploader.destroy(fileData.filename);
+    }
+  });
+
+export const deleteBook = (bookIds) =>
+  new Promise(async (resolve, reject) => {
+    try {
+      const response = await db.Book.destroy({
+        where: { id: bookIds },
+      });
+      resolve({
+        err: response > 0 ? 0 : 1,
+        message: response > 0 ? "Deleted" : "Can not delete book!!!",
+      });
+    } catch (e) {
+      reject(e);
     }
   });
