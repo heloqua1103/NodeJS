@@ -48,6 +48,7 @@ export const createNewBook = (body, fileData) =>
           ...body,
           id: generateId(),
           image: fileData?.path,
+          filename: fileData?.filename,
         },
       });
 
@@ -85,7 +86,7 @@ export const updateBook = ({ bookId, ...body }, fileData) =>
     }
   });
 
-export const deleteBook = (bookIds) =>
+export const deleteBook = (bookIds, filename) =>
   new Promise(async (resolve, reject) => {
     try {
       const response = await db.Book.destroy({
@@ -95,6 +96,7 @@ export const deleteBook = (bookIds) =>
         err: response > 0 ? 0 : 1,
         message: response > 0 ? "Deleted" : "Can not delete book!!!",
       });
+      if (filename) cloudinary.api.delete_resources(filename);
     } catch (e) {
       reject(e);
     }

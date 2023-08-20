@@ -8,6 +8,7 @@ import {
   available,
   bookId,
   bookIds,
+  filename,
 } from "../helpers/joi_schema";
 import joi from "joi";
 const cloudinary = require("cloudinary").v2;
@@ -74,15 +75,18 @@ export const deleteBook = async (req, res) => {
     const { error } = joi
       .object({
         bookIds,
+        filename,
       })
       .validate(req.query);
     if (error) {
       return badRequest(error.details[0].message, res);
     }
-    const response = await authServices.deleteBook(req.query.bookIds);
+    const response = await authServices.deleteBook(
+      req.query.bookIds,
+      req.query.filename
+    );
     return res.status(200).json(response);
   } catch (error) {
-    console.log(error);
     return internalServerError(res);
   }
 };

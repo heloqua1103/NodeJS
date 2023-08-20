@@ -9,3 +9,4 @@ export const category_code = joi.string().uppercase().alphanum().required();
 export const image = joi.string().required();
 export const bookId = joi.string().required();
 export const bookIds = joi.array().required();
+export const filename = joi.array().required();
