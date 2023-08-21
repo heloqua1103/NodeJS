@@ -9,6 +9,7 @@ import {
   bookId,
   bookIds,
   filename,
+  description,
 } from "../helpers/joi_schema";
 import joi from "joi";
 const cloudinary = require("cloudinary").v2;
@@ -32,6 +33,7 @@ export const createNewBook = async (req, res) => {
         category_code,
         price,
         available,
+        description,
       })
       .validate({
         ...req.body,
